@@ -1,3 +1,5 @@
+
+@echo off
 @echo off
 chcp 65001 > nul
 setlocal enabledelayedexpansion
@@ -10,8 +12,7 @@ set "ARCHIVE_ROOT=gdrive:coding_backup_archive"
 set "EXCLUDE_FILE=%SSD_DIR%\rclone_exclude.txt"
 set "ENV_FILE=%SSD_DIR%\.env_sync"
 
-for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /value') do set datetime=%%I
-set "TIMESTAMP=%datetime:~0,4%-%datetime:~4,2%-%datetime:~6,2%_%datetime:~8,2%%datetime:~10,2%%datetime:~12,2%"
+for /f %%I in ('powershell -NoProfile -Command "Get-Date -Format yyyy-MM-dd_HHmmss"') do set "TIMESTAMP=%%I"
 set "BACKUP_DIR=%ARCHIVE_ROOT%\%TIMESTAMP%"
 
 if not exist "%ENV_FILE%" (
@@ -38,8 +39,8 @@ echo =====================================================================
 echo   [Hybrid SSD - Cloud - GitHub] Master Controller V5
 echo   PC : %COMPUTERNAME%  /  Drive : %SSD_DRIVE% (%SSD_DIR%)
 echo =====================================================================
-echo   [1] Push (SSD -> Google Drive + 30d Clean)
-echo   [2] Pull (Google Drive -> SSD)
+echo   [1] Push (SSD to Google Drive + 30d Clean)
+echo   [2] Pull (Google Drive to SSD)
 echo   [3] Deploy All (GitHub Push + Google Drive Sync)
 echo   [4] Setup 19:00 Auto-Schedule and Edit .env_sync
 echo   [5] Safe Eject (Sync and Release SSD Lock)
@@ -57,14 +58,14 @@ if "%menu%"=="2" (
 )
 if "%menu%"=="3" (
     for /d %%D in ("%SSD_DIR%\*") do (
-        if exist "%%D\.git" (pushd "%%D" & git add . & git commit -m "Auto sync %TIMESTAMP%" & git push & popd)
+        if exist "%%D\.git" (pushd "%%D" & git add . & git commit -m "Auto sync %TIMESTAMP%" & git pull --rebase --autostash & git push --no-verify & popd)
     )
     rclone sync "%SSD_DIR%" "%REMOTE_DIR%" --exclude-from "%EXCLUDE_FILE%" --backup-dir "%BACKUP_DIR%" --progress
     pause & goto MAIN_MENU
 )
 if "%menu%"=="4" (
     schtasks /create /tn "SSD_Master_AutoSync" /tr "\"%SSD_DIR%\master_sync.bat\" --auto" /sc daily /st 19:00 /f
-    notepad "%ENV_FILE%"
+    start notepad "%ENV_FILE%"
     pause & goto MAIN_MENU
 )
 if "%menu%"=="5" (
@@ -75,3 +76,6 @@ if "%menu%"=="5" (
 )
 if "%menu%"=="0" exit /b
 goto MAIN_MENU
+
+
+
