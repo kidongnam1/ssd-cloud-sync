@@ -1,0 +1,54 @@
+#!/data/data/com.termux/files/usr/bin/bash
+echo "=========================================================="
+echo "  📱 [Termux Mobile Master] GitHub & Cloud Smart Sync"
+echo "=========================================================="
+mkdir -p "$HOME/program" "$HOME/Program_kdn"
+
+cat << 'EX' > "$HOME/.rclone_exclude.txt"
+구버전_보관/**
+*보관*/**
+*백업*/**
+*backup*/**
+*PRACTICE*/**
+*practice*/**
+**/venv/**
+**/.venv/**
+**/.git/**
+**/__pycache__/**
+**/node_modules/**
+**/.gradle/**
+**/build/**
+**/dist/**
+**/.gstack/**
+*.pyc
+*.log
+*.zip
+*.exe
+*.apk
+*.db-shm
+*.db-wal
+EX
+
+for d in "$HOME"/*/ "$HOME/program"/*/; do
+  if [ -d "${d}.git" ]; then
+    echo "🔄 [GitHub Sync] $(basename "$d")"
+    cd "$d" || continue
+    git add -A
+    git diff-index --quiet HEAD || git commit -m "chore(mobile): sync from Termux ($(date '+%Y-%m-%d %H:%M'))"
+    git pull --rebase --autostash
+    git push --no-verify
+  fi
+done
+
+if rclone listremotes 2>/dev/null | grep -q "^gdrive:"; then
+  echo "☁️ [Google Drive] coding_workspace -> ~/program 동기화 중..."
+  rclone copy gdrive:coding_workspace "$HOME/program" --update --exclude-from "$HOME/.rclone_exclude.txt" --fast-list --transfers 4 --progress
+  rclone copy "$HOME/program" gdrive:coding_workspace --update --exclude-from "$HOME/.rclone_exclude.txt" --fast-list --transfers 4 --progress
+else
+  echo "⚠️ [안내] 구글 드라이브(gdrive)가 아직 연결되지 않았습니다."
+fi
+
+echo "=========================================================="
+echo "  ✔ 스마트폰 Termux 양방향 동기화 완벽 완료!"
+echo "=========================================================="
+ls -la "$HOME/program"
