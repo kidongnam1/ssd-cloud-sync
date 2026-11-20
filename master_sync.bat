@@ -1,62 +1,70 @@
 @echo off
-chcp 65001 > nul
-title 남기동 대표님 외장 SSD 초고속 통합 마스터 (v2.0)
+title Nam Ki-dong SSD Master Sync (v2.3)
 :MENU
 cls
 echo ============================================================
-echo   🚀 남기동 대표님 외장 SSD 초고속 통합 마스터 (v2.0)
-echo   - 일상 코딩(3/5번): F:\program + F:\program-kdn (3.7초 컷)
-echo   - 전체 백업(6번)  : F:\ 업무·개인 전체 알짜 폴더 통백업
+echo   [NAM KI-DONG] External SSD Master Sync (v2.3)
+echo   - [3] Start Work : Fast 2-Way Coding Sync (3.7s)
+echo   - [4] Force Push : Upload Coding Folders Only
+echo   - [5] Fast Eject : Backup Today's Changes (24h) + Eject F:
+echo   - [6] Full Backup: Sync All Clean Folders on F: to Drive
 echo ============================================================
 echo.
-echo   [3] 🔄 출근/작업 시작 (코딩 폴더 초고속 양방향 동기화)
-echo   [4] ☁️ 코딩 폴더 클라우드 강제 업로드
-echo   [5] ⏏️ 퇴근/SSD 분리 (코딩 백업 후 안전 분리)
-echo   [6] 📦 F: 드라이브 전체 알짜 폴더 통백업 (야간/퇴근 시 추천)
-echo   [0] ❌ 창 닫기
+echo   [3] Start Work  - Fast Coding Sync (program + program-kdn)
+echo   [4] Upload Code - Force Upload Coding Folders to Drive
+echo   [5] Fast Eject  - Backup Modified Files (24h) + Eject F:
+echo   [6] Full Backup - Backup Entire Clean F: Drive (Weekly)
+echo   [0] Exit
 echo.
-set /p sel=원하시는 번호를 선택하세요 (3/4/5/6/0): 
+set /p sel=Select Menu (3/4/5/6/0): 
 if "%sel%"=="3" goto SYNC_FAST
 if "%sel%"=="4" goto UPLOAD_FAST
-if "%sel%"=="5" goto EJECT_SAFE
+if "%sel%"=="5" goto EJECT_FAST
 if "%sel%"=="6" goto FULL_BACKUP
 if "%sel%"=="0" exit
 goto MENU
 
 :SYNC_FAST
 echo.
-echo 🔄 [1/2] 구글 드라이브 최신본 받아오기...
+echo [1/2] Downloading latest coding files from Google Drive...
 rclone copy "gdrive:coding_workspace/program" "F:\program" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
 rclone copy "gdrive:coding_workspace/program-kdn" "F:\program-kdn" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
-echo ☁️ [2/2] 내 PC 최신본 클라우드로 올리기...
+echo [2/2] Uploading local coding changes to Google Drive...
 rclone copy "F:\program" "gdrive:coding_workspace/program" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
 rclone copy "F:\program-kdn" "gdrive:coding_workspace/program-kdn" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
 echo.
-echo ✔ 3.7초 초고속 동기화 완료!
+echo [DONE] Fast 2-Way Coding Sync Completed!
 pause
 goto MENU
 
 :UPLOAD_FAST
+echo.
 rclone copy "F:\program" "gdrive:coding_workspace/program" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
 rclone copy "F:\program-kdn" "gdrive:coding_workspace/program-kdn" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
-echo ✔ 업로드 완료!
+echo.
+echo [DONE] Coding Upload Completed!
 pause
 goto MENU
 
-:EJECT_SAFE
-rclone copy "F:\program" "gdrive:coding_workspace/program" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
-rclone copy "F:\program-kdn" "gdrive:coding_workspace/program-kdn" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
-echo ⏏️ 외장 SSD(F:) 안전 분리 준비 중...
+:EJECT_FAST
+echo.
+echo [1/3] Uploading today's coding changes (max-age 24h)...
+rclone copy "F:\program" "gdrive:coding_workspace/program" --exclude-from "F:\program\rclone_exclude.txt" --max-age 24h --transfers 8 -P
+rclone copy "F:\program-kdn" "gdrive:coding_workspace/program-kdn" --exclude-from "F:\program\rclone_exclude.txt" --max-age 24h --transfers 8 -P
+echo [2/3] Uploading today's modified F: files (max-age 24h)...
+rclone copy F:/ "gdrive:F:" --exclude-from "F:\program\rclone_exclude.txt" --max-age 24h --transfers 8 -P
+echo [3/3] Safely ejecting External SSD (F:)...
 powershell -NoProfile -Command "(New-Object -comObject Shell.Application).Namespace(17).ParseName('F:').InvokeVerb('Eject')"
-echo ✔ 이제 외장 SSD 케이블을 안전하게 뽑으셔도 됩니다!
+echo.
+echo [DONE] Backup Complete & F: Drive Safely Ejected!
 pause
 exit
 
 :FULL_BACKUP
 echo.
-echo 📦 [F: 드라이브 전체 알짜 폴더 통백업 시작]
-rclone copy "F:\" "gdrive:F:" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
+echo [Starting Full Clean Backup of F: Drive...]
+rclone copy F:/ "gdrive:F:" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
 echo.
-echo ✔ F: 드라이브 전체 알짜 폴더 백업 완료!
+echo [DONE] Full Clean Backup Completed!
 pause
 goto MENU
