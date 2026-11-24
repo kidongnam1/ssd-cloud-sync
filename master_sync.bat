@@ -27,10 +27,10 @@ goto MENU
 :SYNC_FAST
 echo.
 echo [1/2] Downloading latest coding files from Google Drive...
-rclone copy "gdrive:coding_workspace/program" "F:\program" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
+rclone copy "gdrive:coding_workspace" "F:\program" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
 rclone copy "gdrive:coding_workspace/program-kdn" "F:\program-kdn" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
 echo [2/2] Uploading local coding changes to Google Drive...
-rclone copy "F:\program" "gdrive:coding_workspace/program" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
+rclone copy "F:\program" "gdrive:coding_workspace" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
 rclone copy "F:\program-kdn" "gdrive:coding_workspace/program-kdn" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
 echo.
 echo [DONE] Fast 2-Way Coding Sync Completed!
@@ -39,7 +39,7 @@ goto MENU
 
 :UPLOAD_FAST
 echo.
-rclone copy "F:\program" "gdrive:coding_workspace/program" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
+rclone copy "F:\program" "gdrive:coding_workspace" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
 rclone copy "F:\program-kdn" "gdrive:coding_workspace/program-kdn" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
 echo.
 echo [DONE] Coding Upload Completed!
@@ -49,7 +49,7 @@ goto MENU
 :EJECT_FAST
 echo.
 echo [1/3] Uploading today's coding changes (max-age 24h)...
-rclone copy "F:\program" "gdrive:coding_workspace/program" --exclude-from "F:\program\rclone_exclude.txt" --max-age 24h --transfers 8 -P
+rclone copy "F:\program" "gdrive:coding_workspace" --exclude-from "F:\program\rclone_exclude.txt" --max-age 24h --transfers 8 -P
 rclone copy "F:\program-kdn" "gdrive:coding_workspace/program-kdn" --exclude-from "F:\program\rclone_exclude.txt" --max-age 24h --transfers 8 -P
 echo [2/3] Uploading today's modified F: files (max-age 24h)...
 rclone copy F:/ "gdrive:F:" --exclude-from "F:\program\rclone_exclude.txt" --max-age 24h --transfers 8 -P
