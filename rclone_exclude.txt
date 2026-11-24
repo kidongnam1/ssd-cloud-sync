@@ -1,6 +1,6 @@
-???_??/**
-*??*/**
-*??*/**
+구버전_보관/**
+*백업*/**
+*연습*/**
 *backup*/**
 *PRACTICE*/**
 *practice*/**
@@ -13,6 +13,10 @@
 **/build/**
 **/dist/**
 **/.gstack/**
+**/.test-tmp/**
+**/pytest-of-*/**
+**/.pytest_cache/**
+**/.cache/**
 *.pyc
 *.log
 *.zip
