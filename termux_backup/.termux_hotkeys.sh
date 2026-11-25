@@ -87,5 +87,5 @@ alias gl='git log --oneline --graph -n 5'
 alias py='python3'
 
 menu
-alias 8="ssh '남기동@100.87.8.86'"
-alias seoul="ssh '남기동@100.87.8.86'"
+alias 8='ssh seoul'
+alias seoul='ssh seoul'
