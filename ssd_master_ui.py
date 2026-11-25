@@ -21,7 +21,8 @@ HTML = '''<!DOCTYPE html>
   header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:12px; }
   h1 { font-size:20px; font-weight:700; }
   .badge { background:var(--accent); color:#0f172a; font-size:12px; font-weight:700; padding:3px 8px; border-radius:6px; margin-left:8px; }
-  .top-btns button { background:var(--card); color:var(--text); border:1px solid var(--border); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; margin-left:6px; }
+  .top-btns button, .top-btns .bridge-link { background:var(--card); color:var(--text); border:1px solid var(--border); padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; margin-left:6px; }
+  .top-btns .bridge-link { display:inline-block; text-decoration:none; }
   .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px; margin-bottom:16px; }
   .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px; display:flex; flex-direction:column; justify-content:space-between; }
   .card h3 { font-size:15px; margin-bottom:6px; color:var(--accent); }
@@ -43,6 +44,7 @@ HTML = '''<!DOCTYPE html>
     <div class="top-btns"><button style="background:#0284c7;color:#fff;border:none;font-weight:700;" onclick="toggleHelp(true)">❓ Help (사용 안내)</button><button style="background:#0284c7;color:#fff;border:none;font-weight:700;" onclick="toggleHelp(true)">❓ Help (사용 안내)</button>
       <button onclick="document.body.classList.toggle('light')">다크 / 라이트 전환</button>
       <button onclick="clearLog()">로그 지우기</button>
+      <a class="bridge-link" href="http://127.0.0.1:18895/" target="_blank" rel="noopener noreferrer">모바일 원격 브릿지 (18895)</a>
     </div>
   </header>
   <div class="grid">
