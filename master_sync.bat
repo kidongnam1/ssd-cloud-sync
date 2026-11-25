@@ -1,9 +1,10 @@
 @echo off
-title Nam Ki-dong SSD Master Sync (v2.3)
+title Nam Ki-dong SSD Master Sync (v2.4)
+if /i "%~1"=="auto4" goto AUTO_UPLOAD
 :MENU
 cls
 echo ============================================================
-echo   [NAM KI-DONG] External SSD Master Sync (v2.3)
+echo   [NAM KI-DONG] External SSD Master Sync (v2.4)
 echo   - [3] Start Work : Fast 2-Way Coding Sync (3.7s)
 echo   - [4] Force Push : Upload Coding Folders Only
 echo   - [5] Fast Eject : Backup Today's Changes (24h) + Eject F:
@@ -68,3 +69,8 @@ echo.
 echo [DONE] Full Clean Backup Completed!
 pause
 goto MENU
+:AUTO_UPLOAD
+if not exist F:\program exit /b
+rclone copy "F:\program" "gdrive:coding_workspace/program" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list
+rclone copy "F:\program-kdn" "gdrive:coding_workspace/program-kdn" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list
+exit /b
