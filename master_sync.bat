@@ -15,10 +15,9 @@ echo   [3] Start Work  - Fast Coding Sync (program + program-kdn)
 echo   [4] Upload Code - Force Upload Coding Folders to Drive
 echo   [5] Fast Eject  - Backup Modified Files (24h) + Eject F:
 echo   [6] Full Backup - Backup Entire Clean F: Drive (Weekly)
-echo  [7] GDrive Dedupe : Scan All Google Drive Duplicates
 echo   [0] Exit
 echo.
-set /p sel=Select Menu (3/4/5/6/0): 
+set /p sel=Select Menu (3/4/5/6/7/0): 
 if "%sel%"=="3" goto SYNC_FAST
 if "%sel%"=="4" goto UPLOAD_FAST
 if "%sel%"=="5" goto EJECT_FAST
@@ -81,6 +80,7 @@ exit /b
 cls
 echo ============================================================
 echo  [7] Google Drive Full Duplicate Scan (v2.7 Fast + Live Log)
+echo  * Step 1: 24 Work Folders (30 sec) - Step 2: Big Backups
 echo  * Press Ctrl+C anytime to stop safely without deleting files
 echo ============================================================
 powershell -NoProfile -ExecutionPolicy Bypass -File "F:\program\ssd-cloud-sync\gdrive_dedupe.ps1"
