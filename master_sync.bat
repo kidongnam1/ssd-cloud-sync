@@ -1,10 +1,10 @@
 @echo off
-title Nam Ki-dong SSD Master Sync (v2.4)
+title Nam Ki-dong SSD Master Sync (v2.7)
 if /i "%~1"=="auto4" goto AUTO_UPLOAD
 :MENU
 cls
 echo ============================================================
-echo   [NAM KI-DONG] External SSD Master Sync (v2.4)
+echo   [NAM KI-DONG] External SSD Master Sync (v2.7)
 echo   - [3] Start Work : Fast 2-Way Coding Sync (3.7s)
 echo   - [4] Force Push : Upload Coding Folders Only
 echo   - [5] Fast Eject : Backup Today's Changes (24h) + Eject F:
@@ -15,6 +15,7 @@ echo   [3] Start Work  - Fast Coding Sync (program + program-kdn)
 echo   [4] Upload Code - Force Upload Coding Folders to Drive
 echo   [5] Fast Eject  - Backup Modified Files (24h) + Eject F:
 echo   [6] Full Backup - Backup Entire Clean F: Drive (Weekly)
+echo  [7] GDrive Dedupe : Scan All Google Drive Duplicates
 echo   [0] Exit
 echo.
 set /p sel=Select Menu (3/4/5/6/0): 
@@ -22,6 +23,7 @@ if "%sel%"=="3" goto SYNC_FAST
 if "%sel%"=="4" goto UPLOAD_FAST
 if "%sel%"=="5" goto EJECT_FAST
 if "%sel%"=="6" goto FULL_BACKUP
+if "%sel%"=="7" goto GDRIVE_DEDUPE
 if "%sel%"=="0" exit
 goto MENU
 
@@ -74,3 +76,13 @@ if not exist F:\program exit /b
 rclone copy "F:\program" "gdrive:coding_workspace/program" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list
 rclone copy "F:\program-kdn" "gdrive:coding_workspace/program-kdn" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list
 exit /b
+
+:GDRIVE_DEDUPE
+cls
+echo ============================================================
+echo  [7] Google Drive Full Duplicate Scan (v2.7 Fast + Live Log)
+echo  * Press Ctrl+C anytime to stop safely without deleting files
+echo ============================================================
+powershell -NoProfile -ExecutionPolicy Bypass -File "F:\program\ssd-cloud-sync\gdrive_dedupe.ps1"
+pause
+goto MENU
