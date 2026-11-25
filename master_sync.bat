@@ -1,10 +1,10 @@
 @echo off
-title Nam Ki-dong SSD Master Sync (v2.7)
+title Nam Ki-dong SSD Master Sync (v2.8)
 if /i "%~1"=="auto4" goto AUTO_UPLOAD
 :MENU
 cls
 echo ============================================================
-echo   [NAM KI-DONG] External SSD Master Sync (v2.7)
+echo   [NAM KI-DONG] External SSD Master Sync (v2.8)
 echo   - [3] Start Work : Fast 2-Way Coding Sync (3.7s)
 echo   - [4] Force Push : Upload Coding Folders Only
 echo   - [5] Fast Eject : Backup Today's Changes (24h) + Eject F:
@@ -23,6 +23,14 @@ echo   [6] Full Backup - Backup Entire Clean F: Drive (Weekly)
 echo   [7] GDrive Dedupe - Scan All Google Drive Duplicates
 echo   [0] Exit
 echo.
+echo ------------------------------------------------------------
+echo  [USAGE GUIDE - When to use each menu]
+echo  * [3] Start Work : Morning start (PC ^<--^> Drive 2-way sync)
+echo  * [4] Force Push : Overwrite Drive with local coding folders
+echo  * [5] Fast Eject : Leaving office (24h changes + safe eject)
+echo  * [6] Full Backup: Weekly full F: drive backup (excl. temp)
+echo  * [7] GDrive Dedupe: Find all duplicate files in Google Drive
+echo ------------------------------------------------------------
 set /p sel=Select Menu (3/4/5/6/7/0): 
 if "%sel%"=="3" goto SYNC_FAST
 if "%sel%"=="4" goto UPLOAD_FAST
@@ -33,6 +41,10 @@ if "%sel%"=="0" exit
 goto MENU
 
 :SYNC_FAST
+echo ============================================================
+echo  [RUNNING] Press Ctrl+C (then Y) to stop safely anytime
+echo            Press [Pause] to pause (Space/Enter to resume)
+echo ============================================================
 echo.
 echo [1/2] Downloading latest coding files from Google Drive...
 rclone copy "gdrive:coding_workspace" "F:\program" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
@@ -46,6 +58,10 @@ pause
 goto MENU
 
 :UPLOAD_FAST
+echo ============================================================
+echo  [RUNNING] Press Ctrl+C (then Y) to stop safely anytime
+echo            Press [Pause] to pause (Space/Enter to resume)
+echo ============================================================
 echo.
 rclone copy "F:\program" "gdrive:coding_workspace" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
 rclone copy "F:\program-kdn" "gdrive:coding_workspace/program-kdn" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
@@ -55,6 +71,10 @@ pause
 goto MENU
 
 :EJECT_FAST
+echo ============================================================
+echo  [RUNNING] Press Ctrl+C (then Y) to stop safely anytime
+echo            Press [Pause] to pause (Space/Enter to resume)
+echo ============================================================
 echo.
 echo [1/3] Uploading today's coding changes (max-age 24h)...
 rclone copy "F:\program" "gdrive:coding_workspace" --exclude-from "F:\program\rclone_exclude.txt" --max-age 24h --transfers 8 -P
@@ -69,6 +89,10 @@ pause
 exit
 
 :FULL_BACKUP
+echo ============================================================
+echo  [RUNNING] Press Ctrl+C (then Y) to stop safely anytime
+echo            Press [Pause] to pause (Space/Enter to resume)
+echo ============================================================
 echo.
 echo [Starting Full Clean Backup of F: Drive...]
 rclone copy F:/ "gdrive:F:" --exclude-from "F:\program\rclone_exclude.txt" --transfers 8 --fast-list -P
@@ -93,4 +117,5 @@ echo ============================================================
 powershell -NoProfile -ExecutionPolicy Bypass -File "F:\program\ssd-cloud-sync\gdrive_dedupe.ps1"
 pause
 goto MENU
+
 
