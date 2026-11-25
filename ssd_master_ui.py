@@ -40,7 +40,7 @@ HTML = '''<!DOCTYPE html>
 <div class="wrap">
   <header>
     <div><h1>External SSD Master Sync <span class="badge">HTML Dashboard v2.9</span></h1></div>
-    <div class="top-btns"><button style="background:#0284c7;color:#fff;border:none;font-weight:700;" onclick="toggleHelp(true)">❓ Help (사용 안내)</button>
+    <div class="top-btns"><button style="background:#0284c7;color:#fff;border:none;font-weight:700;" onclick="toggleHelp(true)">❓ Help (사용 안내)</button><button style="background:#0284c7;color:#fff;border:none;font-weight:700;" onclick="toggleHelp(true)">❓ Help (사용 안내)</button>
       <button onclick="document.body.classList.toggle('light')">다크 / 라이트 전환</button>
       <button onclick="clearLog()">로그 지우기</button>
     </div>
@@ -72,6 +72,23 @@ setInterval(async()=>{
   if(atBottom) el.scrollTop = el.scrollHeight;
 }, 800);
 </script>
+<div id="helpModal" onclick="if(event.target===this)toggleHelp(false)" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:12px;max-width:640px;width:100%;padding:22px;box-shadow:0 20px 40px rgba(0,0,0,0.4);line-height:1.6;">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:14px;">
+      <h2 style="font-size:18px;">📘 SSD Master 사용 안내 (Help Guide)</h2>
+      <button onclick="toggleHelp(false)" style="background:#ef4444;color:#fff;border:none;padding:5px 12px;border-radius:6px;cursor:pointer;font-weight:700;">닫기 ✕</button>
+    </div>
+    <ul style="font-size:13.5px;padding-left:18px;display:flex;flex-direction:column;gap:8px;">
+      <li><b>[3] Start Work (출근 2-Way 동기화):</b> 출근 직후 PC와 구글 드라이브의 코딩 폴더(<code>program</code>, <code>program-kdn</code>)를 양방향 최신화합니다.</li>
+      <li><b>[4] Force Push (코딩 강제 업로드):</b> 내 PC에서 수정한 코딩 폴더를 구글 드라이브에 즉시 덮어써서 백업할 때 사용합니다.</li>
+      <li><b>[5] Fast Eject (퇴근 백업 + 안전 분리):</b> 퇴근 전 최근 24시간 내 변경 파일만 빠르게 백업한 뒤 외장 SSD(F:)를 안전 제거합니다.</li>
+      <li><b>[6] Full Backup (주간 F: 전체 백업):</b> 주 1회 외장 SSD(F:) 전체 클린 폴더를 구글 드라이브로 통백업합니다.</li>
+      <li><b>[7] GDrive Dedupe (구글 드라이브 중복 검사):</b> 24개 업무 폴더(약 30초)와 대용량 백업 폴더의 중복 파일을 찾아 바탕화면 <code>gdrive_duplicates.txt</code> 메모장으로 엽니다.</li>
+      <li><b>■ 작업 즉시 안전 중단:</b> 실행 중 급한 용무가 생기면 빨간 중단 버튼을 누르세요. 전송 중이던 파일은 구글 드라이브에 올라가지 않아 <b>손상률 0%</b>이며, 다음 실행 시 멈춘 지점부터 자동 이어받기 됩니다.</li>
+    </ul>
+  </div>
+</div>
+<script>function toggleHelp(show){ document.getElementById('helpModal').style.display = show ? 'flex' : 'none'; }</script>
 <div id="helpModal" onclick="if(event.target===this)toggleHelp(false)" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:999;align-items:center;justify-content:center;padding:20px;">
   <div style="background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:12px;max-width:640px;width:100%;padding:22px;box-shadow:0 20px 40px rgba(0,0,0,0.4);line-height:1.6;">
     <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:14px;">
