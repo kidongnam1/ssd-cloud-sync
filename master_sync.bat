@@ -9,12 +9,18 @@ echo   - [3] Start Work : Fast 2-Way Coding Sync (3.7s)
 echo   - [4] Force Push : Upload Coding Folders Only
 echo   - [5] Fast Eject : Backup Today's Changes (24h) + Eject F:
 echo   - [6] Full Backup: Sync All Clean Folders on F: to Drive
+echo   - [7] GDrive Dedupe: Scan All Google Drive Duplicates
+echo ============================================================
+echo   [SAFE CONTROL] Press Ctrl+C (then Y) anytime to stop safely
+echo                  (0%% file corruption / Auto-resumes next run)
+echo                  Press [Pause] to pause (Space/Enter to resume)
 echo ============================================================
 echo.
 echo   [3] Start Work  - Fast Coding Sync (program + program-kdn)
 echo   [4] Upload Code - Force Upload Coding Folders to Drive
 echo   [5] Fast Eject  - Backup Modified Files (24h) + Eject F:
 echo   [6] Full Backup - Backup Entire Clean F: Drive (Weekly)
+echo   [7] GDrive Dedupe - Scan All Google Drive Duplicates
 echo   [0] Exit
 echo.
 set /p sel=Select Menu (3/4/5/6/7/0): 
@@ -87,3 +93,4 @@ echo ============================================================
 powershell -NoProfile -ExecutionPolicy Bypass -File "F:\program\ssd-cloud-sync\gdrive_dedupe.ps1"
 pause
 goto MENU
+
